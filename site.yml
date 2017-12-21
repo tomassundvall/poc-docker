@@ -1,0 +1,7 @@
+---
+
+- name: Add roles for docker server
+  hosts: docker
+  become: true
+  roles:
+    - docker

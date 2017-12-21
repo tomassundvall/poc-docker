@@ -1,0 +1,29 @@
+---
+# file: docker/tasks/main.yml
+#
+# docker role task file
+#
+
+- name: Ensure apt-transport-https is installed
+  apt: name=apt-transport-https state=present
+
+- name: Ensure ca-certificates is installed
+  apt: name=ca-certificates state=present
+
+- name: Ensure curl is installed
+  apt: name=curl state=present
+
+- name: Ensure software-properties-common is installed
+  apt: name=software-properties-common state=present
+
+- name: add docker repository key
+  apt_key: url="https://download.docker.com/linux/ubuntu/gpg" state=present
+
+- name: Add docker repository
+  apt_repository: repo="deb [arch=amd64] https://download.docker.com/linux/ubuntu zesty stable" state=present
+
+- name: Ensure docker is installed
+  apt:
+    name: docker-ce=17.09.1~ce-0~ubuntu
+    state: present
+    update_cache: yes
