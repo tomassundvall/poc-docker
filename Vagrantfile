@@ -8,9 +8,19 @@ Vagrant.configure("2") do |config|
     #
     # Docker node
     #
-    config.vm.define 'docker' do |d1|
-        d1.vm.hostname = 'docker'
+    config.vm.define 'docker-one' do |d1|
+        d1.vm.hostname = 'docker-one'
         d1.vm.network "private_network", ip: "172.20.20.10"
+        d1.vm.network "forwarded_port", guest: 80, host: 8000
+        d1.vm.provision "shell", privileged: true, path: "install_ansible_agt.sh"
+    end
+
+    #
+    # Docker node
+    #
+    config.vm.define 'docker-two' do |d1|
+        d1.vm.hostname = 'docker-two'
+        d1.vm.network "private_network", ip: "172.20.20.11"
         d1.vm.provision "shell", privileged: true, path: "install_ansible_agt.sh"
     end
 

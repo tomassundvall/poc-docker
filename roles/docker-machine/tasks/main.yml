@@ -1,0 +1,26 @@
+---
+# file: docker-machine/tasks/main.yml
+#
+# docker-machine role task file
+#
+
+- name: Check current docker-machine version.
+  command: docker-machine --version
+  register: docker_machine_current_version
+  changed_when: false
+  failed_when: false
+
+- name: Delete existing docker-machine version if it's different.
+  file:
+    path: "{{ docker_machine_path }}"
+    state: absent
+  when: >
+    docker_machine_current_version.stdout is defined
+    and docker_machine_version not in docker_machine_current_version.stdout
+
+- name: Install docker machine.
+  get_url:
+    url: https://github.com/docker/machine/releases/download/v{{ docker_machine_version }}/docker-machine-Linux-x86_64
+    dest: "{{ docker_machine_path }}"
+    timeout: 30
+    mode: 0755
